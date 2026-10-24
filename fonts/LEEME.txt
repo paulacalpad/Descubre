@@ -1,0 +1,4 @@
+Pon aquí las fuentes con estos nombres exactos (.woff2, .ttf u .otf):
+Marykate
+DreamingOutLoud
+DreamingOutLoudSans
