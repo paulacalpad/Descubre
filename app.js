@@ -74,8 +74,12 @@ const NOT_CONFUSE={
 "biologia":"Biología estudia a los seres vivos y sus procesos; Veterinaria se enfoca en prevenir, diagnosticar y tratar enfermedades de los animales.",
 "agricultura":"Agricultura cultiva plantas y alimentos cuidando la tierra y el agua; Biología estudia a los seres vivos en general.",
 "quimica":"Química estudia de qué están hechas las cosas y cómo se transforman; Física estudia el movimiento, la luz, la energía y la gravedad.",
-"fisica":"Física estudia el movimiento, la luz, la energía y la gravedad; Química estudia de qué están hechas las cosas y cómo se transforman."};
-// Conoce a un profesional: id -> [nombre, perfil, dato curioso]. Faltan: derecho, atleta, quimica
+"fisica":"Física estudia el movimiento, la luz, la energía y la gravedad; Química estudia de qué están hechas las cosas y cómo se transforman.",
+"docencia":"Docencia se enfoca en cómo enseñar y ayudar a aprender; Física, Música y otras carreras se enfocan en dominar un tema, y quienes las estudian también pueden dedicarse a enseñarlo.",
+"derecho":"Derecho estudia las leyes y ayuda a defender derechos y resolver conflictos; Administración de Empresas puede conocer leyes de negocios, pero se enfoca en organizar y dirigir una empresa.",
+"musica":"Música crea e interpreta sonidos y canciones; Diseño de Moda crea prendas y colecciones. Las dos son carreras creativas, pero con materiales muy diferentes.",
+"atleta":"Atleta entrena y compite para mejorar su rendimiento deportivo; Nutrición estudia cómo la alimentación influye en la salud, también la de las personas deportistas."};
+// Conoce a un profesional: id -> [nombre, perfil, dato curioso]. Completo (24 carreras)
 const PERFILES={
 "arquitectura":["Luis Barragán","Fue un arquitecto mexicano famoso por sus colores y jardines. ¡En 1980 ganó el Premio Pritzker, el más importante de arquitectura!","¡Sus edificios parecen obras de arte gracias a sus colores y formas!"],
 "ingenieria-civil":["Ángela Alessio Robles","Fue una ingeniera civil mexicana que ayudó a planear el crecimiento de la Ciudad de México y participó en proyectos urbanos como la Macroplaza de Monterrey.","En 1965 fue reconocida como Mujer del Año por su trayectoria profesional."],
@@ -298,6 +302,10 @@ Object.assign(PERFILES,{
 "nutricion":["Elena Zambrano González","Es una investigadora y nutrióloga mexicana que ganó la Medalla David Barker. Estudia cómo los alimentos que comemos desde bebés nos ayudan a crecer fuertes y prevenir enfermedades.","¡Sus descubrimientos enseñan a las familias a comer rico y sano para vivir mejor!"],
 "docencia":["Diana Lorena Rubio Navarro","Es una maestra mexicana nominada entre las 10 mejores docentes del mundo en el Global Teacher Prize. Enseña ciencias a niños con experimentos divertidos para descubrir sus talentos.","¡Sus clases de ciencia son tan creativas que inspiran a sus alumnos a convertirse en grandes inventores!"]});
 
+Object.assign(PERFILES,{
+"derecho":["Sergio García Ramírez","Es un eminente jurista mexicano. Fue Presidente de la Corte Interamericana de Derechos Humanos. Sus sentencias protegieron la dignidad de personas en toda América.","¡Sus decisiones legales se estudian en todo el mundo y ayudan a crear leyes más justas!"],
+"atleta":["Saúl “Canelo” Álvarez","Es un boxeador mexicano legendario. Ha sido campeón mundial en múltiples divisiones de peso, ¡un logro increíble!","¡Es el primer boxeador de la historia en ser campeón indiscutible de peso supermediano!"],
+"quimica":["Mario Molina","Fue un gran químico mexicano que descubrió por qué la capa de ozono se dañaba. ¡Por su investigación, ganó el Premio Nobel de Química!","¡Gracias a su trabajo, el mundo se unió para proteger el medio ambiente prohibiendo sustancias dañinas!"]});
 // Actividades destacadas del Patronato (agregar aquí las siguientes): [foto, título, texto, texto alternativo, posición de la foto]
 const ACTD=[
 ["act-mural","Mural colectivo","Trabajamos juntos para crear un mural lleno de color y creatividad.","Niña pintando con un pincel un mural sobre papel kraft","35% 55%"],
@@ -310,9 +318,84 @@ const REV_N=51,REV_PDF="";/* poner aquí la ruta del PDF (ej. "revista/DESCUBRE.
 const REV_ORDER=["arquitectura","ingenieria-civil","carpinteria","medicina","veterinaria","nutricion","docencia","derecho","programacion","ingenieria-mecanica","diseno-de-moda","musica","administracion-de-empresas","reposteria-y-panaderia","marketing-y-publicidad","emprendimiento","gastronomia","biologia","agricultura","aviacion","atleta","maquillaje","quimica","fisica"];
 const revSrc=n=>(window.IMGDATA&&IMGDATA["rev"+n])||"revista/p"+String(n).padStart(2,"0")+".webp";
 
+// Fotos de las personas destacadas: id de carrera -> texto alternativo de la foto grande.
+// Archivos: img/persona-<id>-cara.webp (cuadrada, va en círculo) e img/persona-<id>-grande.webp (va en arco, a la derecha)
+const PFOTOS={
+"arquitectura":"Patio con muros de colores morado, rosa y blanco, un árbol grande, cactus y vasijas de barro",
+"ingenieria-civil":"Plaza con una gran bandera de México y un edificio histórico de cantera",
+"carpinteria":"Figuras de madera talladas y pintadas de dos jugadores de futbol dentro de un marco decorado",
+"medicina":"Mano con guante azul aplicando una vacuna en un brazo",
+"nutricion":"Mujer sonriente sosteniendo una medalla dorada en una caja negra",
+"programacion":"Mujer con un vestido bordado de flores frente a un edificio con el letrero de Google",
+"ingenieria-mecanica":"Dos hombres trabajando con equipo electrónico en una fotografía en blanco y negro",
+"aviacion":"Portada antigua de una revista con un piloto de pie frente a su avión",
+"fisica":"Cohete despegando entre nubes de humo y fuego al atardecer",
+"docencia":"Maestra sonriente mostrando un experimento con una botella en un salón",
+"agricultura":"Edificio de la universidad con el nombre Antonio Narro en la fachada, rodeado de jardines",
+"biologia":"Mujer con gorra y camisa de campo entre las hojas de una selva",
+"veterinaria":"Hombre sosteniendo un diploma enmarcado y un trofeo en una ceremonia de premiación frente a un mural de animales",
+"reposteria-y-panaderia":"Mesa con el nombre Mis Pastelitos en una cafetería decorada con donas, helados y macarons gigantes",
+"gastronomia":"Portada de un libro de recetas mexicanas con chiles rellenos en un plato de barro",
+"maquillaje":"Un hombre ajusta el vestido de una modelo durante la preparación de un desfile",
+"diseno-de-moda":"Modelo con sombrero negro y un poncho rosa bordado con figuras de colores en una pasarela",
+"musica":"Cantante con micrófono en un concierto, con los ojos cerrados",
+"emprendimiento":"Hombre sonriente sentado frente a una pantalla morada en un programa de televisión",
+"marketing-y-publicidad":"Hombre de playera negra dando una conferencia con micrófono y señalando hacia un lado",
+"derecho":"Hombre sonriente sosteniendo varios libros sobre una mesa, frente a un escudo en la pared",
+"atleta":"Boxeador con varios cinturones de campeonato sobre un fondo oscuro",
+"quimica":"Hombre de traje gris de pie frente a un fondo dorado",
+"administracion-de-empresas":"Réplica de un avión dentro de un centro de actividades para niños, con el letrero de KidZania"};
+const avatar=id=>PFOTOS[id]?`<img class="avatar" src="${imgSrc("persona-"+id+"-cara")}" alt="Retrato de ${PERFILES[id][0]}" loading="lazy">`:`<div class="ph round" role="img" aria-label="Espacio para foto de la persona destacada"></div>`;
+const grande=id=>PFOTOS[id]?`<img class="arch" src="${imgSrc("persona-"+id+"-grande")}" alt="${PFOTOS[id]}" loading="lazy">`:`<div class="ph arch" role="img" aria-label="Espacio para foto grande"></div>`;
+
+// Créditos de imágenes: [sección, [[título, [líneas]]]]. Las líneas que empiezan con "Créditos:", "Fuente:" o "Fuentes:" se muestran con la etiqueta en negritas.
+const CRED=[
+["Ciencia, tecnología e ingeniería",[
+["Dra. Diana Lorena Rubio Navarro",["Retrato y fotografía realizando experimentos en un laboratorio o aula.","Créditos: cortesía de Diana Lorena Rubio Navarro, Movimiento STEAM / Global Teacher Prize."]],
+["Dra. Elena Zambrano González",["Retrato institucional.","Fotografía con la Medalla David Barker 2025.","Créditos: INCMNSZ / Facultad de Química de la UNAM / International DOHaD Society."]],
+["Emilio Carranza Rodríguez",["Fotografías históricas junto a sus aeronaves.","Portada del semanario Jueves de Excélsior, del 14 de junio de 1928.","Fuentes: Archivo Histórico de Excélsior / Fototeca Nacional del INAH / Library of Congress."]],
+["Guillermo González Camarena",["Fotografías históricas del inventor trabajando en su laboratorio con equipos y circuitos electrónicos.","Fuente: Archivo Histórico de la Televisión Mexicana."]],
+["Gabriela Salas Cabrera",["Retrato de divulgación científica.","Fotografía en instalaciones de Google.","Fuentes: Tec Review / Agencia EFE / Forbes México / Google México."]],
+["J. Guadalupe Velázquez Galván",["Retrato durante una entrega de reconocimientos.","Retablo futbolístico de madera policromada.","Créditos: J. Guadalupe Velázquez Galván / Secretaría de Cultura de México / FONART / Fomento Cultural Banamex."]],
+["Dr. Carlos Canseco González",["Retrato relacionado con su trayectoria médica y su participación en la lucha mundial contra la poliomielitis.","Fuente: Rotary International / campaña End Polio Now."]],
+["Ing. Ángela Alessio Robles",["Fotografía documental frente al Zócalo y la Catedral de la Ciudad de México.","Fuentes: Fototeca Nacional del INAH / Archivo Histórico de la Ciudad de México."]],
+["Dra. Margaret Dominguez",["Retrato profesional relacionado con su trabajo en ingeniería óptica e investigación espacial.","Fuente: NASA / materiales institucionales de divulgación científica."]]]],
+["Arquitectura y espacios urbanos",[
+["Luis Barragán Morfín",["Retrato histórico del arquitecto.","Créditos: Fundación de Arquitectura Luis Barragán / Barragan Foundation."]],
+["Casa Gilardi",["Fotografía del patio interior con jacaranda y muros de colores.","Créditos: Fundación de Arquitectura Luis Barragán / Barragan Foundation."]],
+["Plaza Zaragoza, Palacio de Gobierno y Macroplaza de Monterrey",["Fotografía panorámica del espacio urbano.","Fuentes: archivos turísticos de Monterrey / Filma Nuevo León."]],
+["Campus de la Universidad Autónoma Agraria Antonio Narro",["Fotografía de la fachada del edificio de Rectoría en Saltillo, Coahuila.","Créditos: Universidad Autónoma Agraria Antonio Narro (UAAAN)."]]]],
+["Medicina y salud",[
+["Fotografía de vacunación",["Imagen de un profesional de la salud aplicando una vacuna.","Fuente: banco de imágenes Freepik / Adobe Stock / Shutterstock."]],
+["Cohete Falcon Heavy y proyecto Nancy Grace Roman Space Telescope",["Fotografía relacionada con el lanzamiento de cohetes y la exploración espacial.","Créditos: NASA / SpaceX."]]]],
+["Gastronomía",[
+["Enrique Olvera",["Retrato profesional del chef.","Fuentes: Grupo Olvera / Pujol."]],
+["Libro Tu Casa Mi Casa",["Portada del libro de cocina mexicana.","Créditos editoriales: Phaidon Press.","Autores: Enrique Olvera, Luis Arellano, Gonzalo Goût y Daniela Soto-Innes."]],
+["Gris Verduzco — Mis Pastelitos",["Retrato promocional de la creadora de contenido.","Fotografía de un espacio temático o evento de Mis Pastelitos.","Créditos: Gris Verduzco / Mis Pastelitos / Sisters On Trend."]]]],
+["Diseño, moda y belleza",[
+["Carla Fernández",["Retrato de la diseñadora.","Fotografía de pasarela con prendas inspiradas en técnicas textiles tradicionales.","Fuentes: Carla Fernández / Mercedes-Benz Fashion Week México."]],
+["Luis Torres",["Retrato profesional del maquillador.","Fotografía maquillando a Kendall Jenner.","Fuentes: Luis Torres Beauty / Vogue."]]]],
+["Administración, negocios y emprendimiento",[
+["Arturo Elías Ayub",["Retrato corporativo.","Fotografía en el set de Shark Tank México.","Fuentes: Grupo Carso / América Móvil / Sony Pictures Television."]],
+["Edson Noyola",["Retrato profesional.","Fotografía durante una conferencia de mercadotecnia.","Fuente: Tecnológico de Monterrey / EXATEC."]]]],
+["Música y entretenimiento",[
+["Juan Gabriel",["Retrato de estudio.","Fotografía durante una presentación en vivo.","Fuentes: Agencia EFE / Getty Images / archivos musicales."]]]],
+["Agricultura, medio ambiente e historia regional",[
+["Antonio Narro Rodríguez",["Retrato histórico del agrónomo y benefactor coahuilense.","Fuente: archivo histórico regional / Universidad Autónoma Agraria Antonio Narro."]],
+["Dr. Moisés Vargas Terán",["Retrato relacionado con su trayectoria médica y académica.","Fuente: archivo de divulgación médica y académica."]],
+["Julia Carabias Lillo",["Retrato institucional.","Fotografía en una selva o reserva natural.","Fuentes: SEMARNAT / UNAM / Fundación Natura y Ecosistemas Mexicanos."]]]],
+["Educación y experiencias profesionales",[
+["Instalaciones de KidZania Surabaya",["Fotografía de una réplica de avión patrocinada por tiket.com.","Fuentes: KidZania / tiket.com."]],
+["Xavier López Ancona",["Retrato corporativo del fundador de KidZania.","Fuente: KidZania."]]]]];
+const CRED3=[
+["1. Dr. Mario Molina","Ingeniero químico, científico y académico mexicano, ganador del Premio Nobel de Química en 1995 por sus investigaciones sobre la capa de ozono.","© Centro Mario Molina / Archivo Fotográfico Institucional.","Retrato institucional utilizado con fines informativos y biográficos."],
+["2. Saúl “Canelo” Álvarez","Boxeador profesional mexicano y campeón mundial en múltiples divisiones de peso.","© Getty Images / Matchroom Boxing.","Fotografía deportiva de carácter promocional o editorial, sujeta a los derechos de sus respectivos titulares."],
+["3. Dr. Sergio García Ramírez","Jurista, investigador, escritor y magistrado mexicano, reconocido por su trayectoria en derecho penal y derechos humanos.","© UNAM, Instituto de Investigaciones Jurídicas / Archivo Académico.","Retrato institucional y académico utilizado con fines informativos y de divulgación jurídica."]];
+const credLine=l=>/^(Créditos editoriales|Créditos|Fuentes?|Autores):/.test(l)?`<p><b>${l.slice(0,l.indexOf(":")+1)}</b>${l.slice(l.indexOf(":")+1)}</p>`:`<p>${l}</p>`;
+
 /* ===== VISTAS ===== */
 const views={
-inicio(){const feat=CAREERS.slice(0,4);return `<section class="hero"><div><h1 aria-label="¡Descubre tu talento, diseña tu futuro!">${rb("¡Descubre tu talento, diseña tu futuro!")}</h1><p>¡Explora el mundo de las carreras! Descubre qué hacen las personas en diferentes profesiones, conoce nuevas opciones y prueba actividades para descubrir cuáles te interesan más. ¡Hay todo un mundo de carreras por conocer!</p><p><a class="btn" href="#carreras">Explorar carreras</a> <a class="btn alt" href="#actividades">Descubrir actividades</a></p></div>${ph("ilustración principal")}</section>
+inicio(){const feat=CAREERS.slice(0,4);return `<section class="hero"><div><h1 aria-label="¡Descubre tu talento, diseña tu futuro!">${rb("¡Descubre tu talento, diseña tu futuro!")}</h1><p>¡Explora el mundo de las carreras! Descubre qué hacen las personas en diferentes profesiones, conoce nuevas opciones y prueba actividades para descubrir cuáles te interesan más. ¡Hay todo un mundo de carreras por conocer!</p><p><a class="btn" href="#carreras">Explorar carreras</a> <a class="btn alt" href="#actividades">Descubrir actividades</a></p></div></section>
 <section><h2>Carreras destacadas</h2><div class="grid">${feat.map(careerCard).join("")}</div></section>
 <section><h2>Actividades destacadas</h2><p>Lo que hemos hecho en el Patronato de la Casa de los Niños.</p>${destacadas()}</section>
 <section class="two"><div class="box hl"><h2>Conoce a un profesional</h2><p>¡Conoce a personas increíbles que han convertido sus ideas y talentos en grandes logros!</p><a class="btn" href="#profesionales">Ver perfiles</a></div><div class="box hl"><h2>Diccionario de carreras</h2><p>¡Descubre qué significan palabras como beca, carrera y profesión, y aprende nuevas palabras que te ayudarán a explorar tu futuro!</p><a class="btn" href="#diccionario">Abrir diccionario</a></div></section>
@@ -327,18 +410,19 @@ return `<section class="cr"><a class="crumb" href="#carreras-lista">← Todas la
 ${NOT_CONFUSE[id]?`<div class="box hl" style="margin-top:18px"><h3>¡No las confundas!</h3><p>${NOT_CONFUSE[id]}</p></div>`:""}
 <div class="two" style="margin-top:18px"><div class="box"><h2>Habilidades clave</h2><ul class="pills">${(CS[id]||[]).map(k=>`<li>${k}</li>`).join("")}</ul></div><div class="box hl"><h2>Datos rápidos</h2><div class="fact"><span>🎓</span><div><b>Estudios:</b> ${F.e||T("Estudios")}</div></div><div class="fact"><span>💼</span><div><b>¿Qué hacen en el trabajo?</b>${F.q?(Array.isArray(F.q)?`<ul class="steps">${F.q.map(x=>`<li>${x}</li>`).join("")}</ul>`:" "+F.q):" "+T("Trabajo")}</div></div>${F.w2?`<div class="fact"><span>📍</span><div><b>¿Dónde pueden trabajar?</b> ${F.w2}</div></div>`:""}<div class="fact"><span>🧭</span><div><b>Campo laboral:</b> ${F.l||T("Campo laboral")}</div></div></div></div>
 ${F.w?`<div class="box" style="margin-top:18px"><h2>¿Dónde puede trabajar?</h2><p>${F.w}</p></div>`:""}
-<div class="two" style="margin-top:18px"><div class="box"><h2>Conoce a un profesional</h2><div class="prof"><div class="ph round" role="img" aria-label="Espacio para foto del profesional"></div><div><span class="brush">${P?P[0]:"[Nombre]"}</span></div></div>${P?`<p>${P[1]}</p><p><b>Dato curioso:</b> ${P[2]}</p>`:`<p>${T("Perfil de una persona destacada")}</p>`}<a href="#profesionales">Ver más perfiles</a></div><div class="box"><h2>En acción</h2><span class="tag">Carrera: ${a.cn}</span><h3>${a.t}</h3><p><b>Necesitas:</b> ${a.m}</p><ol class="steps">${a.p.map(s=>`<li>${s}</li>`).join("")}</ol><a href="#enaccion">Más actividades</a></div></div>
+<div class="two" style="margin-top:18px"><div class="box"><h2>Conoce a un profesional</h2><div class="prof">${P?avatar(id):`<div class="ph round" role="img" aria-label="Espacio para foto del profesional"></div>`}<div><span class="brush">${P?P[0]:"[Nombre]"}</span></div></div>${P?`<p>${P[1]}</p><p><b>Dato curioso:</b> ${P[2]}</p>`:`<p>${T("Perfil de una persona destacada")}</p>`}<a href="#profesionales">Ver más perfiles</a></div><div class="box"><h2>En acción</h2><span class="tag">Carrera: ${a.cn}</span><h3>${a.t}</h3><p><b>Necesitas:</b> ${a.m}</p><ol class="steps">${a.p.map(s=>`<li>${s}</li>`).join("")}</ol><a href="#enaccion">Más actividades</a></div></div>
 ${ts?testHTML(ts,false):""}
 <div class="box hl" style="margin-top:18px"><h2>Dato curioso</h2><p>${F.d||T("Dato")}</p></div>
 ${F.z?`<p class="cierre" style="color:${PAL[(ix+2)%5]}">${F.z}</p>`:""}
 <h2 style="margin-top:28px">Profesiones relacionadas</h2><div class="grid">${rel.map(careerCard).join("")}</div></section>`},
-profesionales(){return `<section><h2>Conoce a un profesional</h2><p>Personas destacadas de México en distintas profesiones.</p>${CAREERS.filter(c=>PERFILES[c[0]]).map(c=>{const p=PERFILES[c[0]];return `<article class="pro"><div><div class="prof"><div class="ph round" role="img" aria-label="Espacio para foto de ${esc(p[0])}"></div><div><span class="brush">${esc(p[0])}</span><br><span class="tag">${c[1]}</span></div></div><p>${esc(p[1])}</p><div class="box"><h3>Dato curioso</h3><p>${esc(p[2])}</p></div><a href="#carrera-${c[0]}">Ver la carrera</a></div><div class="ph arch" role="img" aria-label="Espacio para foto grande de ${esc(p[0])}"></div></article>`}).join("")}</section>`},
+profesionales(){return `<section><h2>Conoce a un profesional</h2><p>Personas destacadas de México en distintas profesiones.</p>${CAREERS.filter(c=>PERFILES[c[0]]).map(c=>{const p=PERFILES[c[0]];return `<article class="pro"><div><div class="prof">${avatar(c[0])}<div><span class="brush">${esc(p[0])}</span><br><span class="tag">${c[1]}</span></div></div><p>${esc(p[1])}</p><div class="box"><h3>Dato curioso</h3><p>${esc(p[2])}</p></div><a href="#carrera-${c[0]}">Ver la carrera</a></div>${grande(c[0])}</article>`}).join("")}</section>`},
 diccionario(){return `<section><h2>Diccionario de carreras</h2><div class="tools"><input id="gq" type="search" placeholder="Busca una palabra…" aria-label="Buscar palabra"></div><div class="az" id="az"></div><div class="grid" id="gl" style="margin-top:16px"></div></section>`},
 actividades(){return `<section><h2>Actividades y tests</h2><div class="two"><div class="box"><h3>Conoce a un profesional</h3><p>Perfiles de personas destacadas de México.</p><a class="btn" href="#profesionales">Entrar</a></div><div class="box"><h3>En acción</h3><p>Actividades con hoja, lápiz y otros materiales.</p><a class="btn" href="#enaccion">Entrar</a></div><div class="box"><h3>¿Te identificas?</h3><p>Tests para descubrir tus intereses.</p><a class="btn" href="#tests">Entrar</a></div><div class="box"><h3>Diccionario de carreras</h3><p>Palabras explicadas fácil.</p><a class="btn" href="#diccionario">Entrar</a></div></div></section>`},
 revista(){return `<section class="rvs"><div class="rvtop"><h2>Revista digital</h2><label>Ir a: <select id="rv-go"></select></label><span id="rv-n" aria-live="polite"></span></div><div class="rv-stage"><button class="rv-nav" id="rv-prev" type="button" aria-label="Página anterior">‹</button><div class="rv-book" id="rv-book"></div><button class="rv-nav" id="rv-next" type="button" aria-label="Página siguiente">›</button></div><p id="rv-link" style="text-align:center"></p>${REV_PDF?`<p style="text-align:center"><a class="btn" href="${REV_PDF}" download>Descargar o imprimir la revista (PDF)</a></p>`:""}</section>`},
 sobre(){return `<section><h2>Sobre el proyecto</h2><div class="two"><div class="box"><h3>Por qué surgió</h3><p>DESCUBRE nació de la idea de acercar el mundo de las profesiones a más personas y ayudarlas a descubrir nuevas posibilidades para su futuro. Forma parte de un proyecto solidario que incluye actividades en el Patronato de la Casa de los Niños, donde buscamos despertar la curiosidad de los niños y ayudarlos a explorar sus intereses, habilidades y posibles vocaciones.</p></div><div class="box"><h3>Qué busca lograr</h3><p>Buscamos despertar la curiosidad, ampliar la visión que las personas tienen sobre las profesiones y ayudarles a reconocer sus propios intereses y habilidades. Queremos mostrar que existen muchos caminos diferentes y que conocerlos puede ayudar a imaginar un futuro con más posibilidades, sin tener que decidirlo todo desde pequeños.</p></div><div class="box"><h3>Para quién es</h3><p>DESCUBRE está pensado para niños, adolescentes, jóvenes y cualquier persona que quiera conocer más sobre las profesiones y descubrir nuevas posibilidades. También es una herramienta para maestros, familias y educadores que buscan acompañar a otros en la exploración de sus intereses y habilidades.</p></div><div class="box"><h3>ODS 4: Educación de calidad</h3><p>DESCUBRE se relaciona con el Objetivo de Desarrollo Sostenible 4 de las Naciones Unidas, que busca garantizar una educación inclusiva, equitativa y de calidad. A través de información accesible y actividades educativas, queremos acercar nuevas oportunidades de aprendizaje a distintas personas y contribuir a que conozcan más opciones para su desarrollo y futuro.</p></div><div class="box"><h3>Úsalo en talleres</h3><p>DESCUBRE puede utilizarse en talleres, escuelas y actividades grupales para explorar distintas profesiones de una manera dinámica. Su contenido permite conocer carreras, identificar habilidades personales y realizar actividades que ayuden a descubrir intereses y nuevas opciones para el futuro.</p></div><div class="box"><h3>Agradecimientos</h3><p>Agradecemos al Patronato de la Casa de los Niños por permitirnos desarrollar actividades que promueven el aprendizaje y la exploración vocacional. También agradecemos a todas las personas que colaboraron en la creación de DESCUBRE y que hicieron posible esta iniciativa, cuyo propósito es compartir conocimientos, despertar la curiosidad y acercar nuevas oportunidades a más personas.</p></div></div><h2 style="margin-top:30px">Actividades destacadas</h2>${destacadas()}</section>`},
 enaccion(){return `<section><h2>En acción</h2><p>Actividades para hacer con hoja, lápiz y otros materiales.</p><div class="tools"><input id="aq" type="search" placeholder="Busca una actividad o material…" aria-label="Buscar actividades"></div><div class="grid" id="al"></div></section>`},
 tests(){return `<section><h2>¿Te identificas?</h2><p>Tus respuestas no se guardan ni se envían a ningún lado.</p><div class="grid" id="tl"></div></section>`},
+creditos(){return `<section id="creditos"><h2>Créditos y fuentes de imágenes</h2><p>En DESCUBRE reconocemos el trabajo de fotógrafos, artistas, instituciones, medios de comunicación y organizaciones cuyas imágenes ayudan a mostrar diferentes profesiones y trayectorias. Los créditos identifican las fuentes y los titulares correspondientes a las imágenes utilizadas.</p>${CRED.map(s=>`<h2 class="cs">${s[0]}</h2><div class="grid">${s[1].map(e=>`<article class="card"><h3>${e[0]}</h3>${e[1].map(credLine).join("")}</article>`).join("")}</div>`).join("")}<h2 class="cs">Fichas de crédito</h2><div class="grid">${CRED3.map(c=>`<article class="card"><h3>${c[0]}</h3><p><b>Identificación:</b> ${c[1]}</p><p><b>Créditos y derechos de autor:</b> ${c[2]}</p><p><b>Uso:</b> ${c[3]}</p></article>`).join("")}</div><div class="box" style="margin-top:34px"><h3>Nota de créditos</h3><p>DESCUBRE reconoce la autoría de las fotografías, ilustraciones y demás materiales visuales utilizados en el proyecto. Los derechos de cada imagen pertenecen a sus respectivos autores o titulares, de acuerdo con las condiciones aplicables a cada obra.</p></div></section>`},
 nf(){return `<section><div class="empty"><h2>Página no encontrada</h2><a class="btn" href="#inicio">Volver al inicio</a></div></section>`}
 };
 
